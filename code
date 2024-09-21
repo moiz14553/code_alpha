@@ -1,0 +1,88 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Task {
+    string description;
+    bool completed;
+};
+
+class ToDoList {
+private:
+    vector<Task> tasks;
+
+public:
+    void addTask(const string& taskDescription) {
+        Task newTask = {taskDescription, false};
+        tasks.push_back(newTask);
+        cout << "Task added: " << taskDescription << endl;
+    }
+
+    void completeTask(int index) {
+        if (index >= 0 && index < tasks.size()) {
+            tasks[index].completed = true;
+            cout << "Task completed: " << tasks[index].description << endl;
+        } else {
+            cout << "Invalid task index." << endl;
+        }
+    }
+
+    void viewTasks() const {
+        if (tasks.empty()) {
+            cout << "No tasks available." << endl;
+            return;
+        }
+
+        cout << "Current Tasks:" << endl;
+        for (size_t i = 0; i < tasks.size(); ++i) {
+            cout << i + 1 << ". " << tasks[i].description;
+            if (tasks[i].completed) {
+                cout << " [Completed]";
+            }
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    ToDoList todoList;
+    int choice;
+    string taskDescription;
+
+    do {
+        cout << "\nTo-Do List Menu:" << endl;
+        cout << "1. Add Task" << endl;
+        cout << "2. Complete Task" << endl;
+        cout << "3. View Tasks" << endl;
+        cout << "4. Exit" << endl;
+        cout << "Choose an option: ";
+        cin >> choice;
+        cin.ignore(); // To ignore the newline character left in the input buffer
+
+        switch (choice) {
+            case 1:
+                cout << "Enter task description: ";
+                getline(cin, taskDescription);
+                todoList.addTask(taskDescription);
+                break;
+            case 2:
+                int taskIndex;
+                cout << "Enter task number to complete: ";
+                cin >> taskIndex;
+                todoList.completeTask(taskIndex - 1); // Adjusting for zero-based index
+                break;
+            case 3:
+                todoList.viewTasks();
+                break;
+            case 4:
+                cout << "Exiting the program." << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (choice != 4);
+
+    return 0;
+}
